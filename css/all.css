@@ -1,3 +1,4 @@
+/* Reset CSS */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -42,24 +43,13 @@ table {
 	border-spacing: 0;
 }
 
-img {
-    max-width: 100%;
-    height: auto;
-}
-
-.bg-cover{
-  background-size: cover;
-  background-position: center center;
-  background-attachment:scroll
-}
-
-.clearfix {
-	overflow: auto;
-  zoom: 1;
-  clear: both; 
-}
-
+/* 整個版面 */
 body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 微軟正黑體; 
   background-image: url('../images/background_img.jpg');
   background-repeat:no-repeat;
   background-size: cover;
@@ -67,30 +57,50 @@ body {
   background-attachment:scroll;
 }
 
-.wrap {
-  font-family: 微軟正黑體; 
+/* 標題+卡片堆半透明區塊 */
+.memory_games_total {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-
-.memory_games_total {
   width: 750px;
   height: 850px;
-  margin-top: 40px;
+  margin-top: 20px;
   background-color: rgba(255,255,255,0.7);
   border-radius: 5%;
   box-shadow:0px 0px 10px rgba(10,10,0.8);
 }
 
+@media screen and (max-width: 1366px){
+  .memory_games_total {
+    width: 630px;
+    height: 730px;
+    margin-top: 20px;
+  }
+}
+
+/* 標題 */
 .title {
   font-size: 50px;
   padding: 20px 0px;
-  margin:30px 0px 20px 0px;
+  margin-top:30px;
   text-align: center;
 }
 
+@media screen and (max-width: 1366px){
+  .title {
+    margin-top:10px;
+    padding: 5px 0px;
+  }
+}
+
+/* 記分板 */
+#socopeBoard {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* 卡片堆 */
 .memory_games{
   width: 680px;
   height: 680px;
@@ -99,6 +109,14 @@ body {
   flex-wrap: wrap;
 }
 
+@media screen and (max-width: 1366px){
+  .memory_games{
+    width: 620px;
+    height: 620px;
+  }
+}
+
+/* 卡片 */
 .memory_card{
   width: calc(25% - 10px);
   height: calc(33.333% - 10px);
@@ -111,9 +129,8 @@ body {
   cursor: pointer;
 }
 
-/*front card*/
-
-.card_front{
+/*front card（卡片前面）*/
+.card_front,.card_back{
   background-color: #ffffff;
   border-radius:10%;
   position:absolute;
@@ -137,27 +154,24 @@ body {
     font-weight: bold;;
 }
 
-/*back card*/
+/*back card（卡片後面*/
 .card_back{
   background-color: #accbee;
-  border-radius:10%;
-  position:absolute;
-  width:100%;
-  height:100%;
-  /*hide backface*/
-  backface-visibility:hidden;
-  font-size:1.5rem;
   transform:rotateY(0deg);
 }
 
 .card_back i {
-    display:block;
-    position:absolute;
-    right:12%;
-    bottom:5%;
-    color:#6EAC7D;
+  display:block;
+  text-align: center;
+  color:#6EAC7D;
+  padding-top: 10px;
 }
 
+@media screen and (max-width: 1366px){
+  .card_back i {
+    padding-top: 0px;
+  }
+}
 
 .flip {
   transform:rotateY(180deg);
