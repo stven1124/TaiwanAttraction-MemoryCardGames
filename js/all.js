@@ -7,11 +7,11 @@ let allScope = getScope(0);
 
 /* 點擊翻牌 */
 function flipCard(e) {
-   // 沒配對成功的話，就把牌蓋起來
-   if (lockBoard) return;
-  
-   // 避免翻同一張牌當做第二張
-   if (this === firstCard) return;
+  // 沒配對成功的話，就把牌蓋起來
+  if (lockBoard) return;
+
+  // 避免翻同一張牌當做第二張
+  if (this === firstCard) return;
 
   this.classList.add('flip');
 
@@ -25,22 +25,22 @@ function flipCard(e) {
   secondCard = this;
 
   checkMatchCards();
-  
+
   // 遊戲結束
-  if(Array.from(cards).every((card) => card.className === "memory_card flip")){
+  if (Array.from(cards).every((card) => card.className === "memory_card flip")) {
     setTimeout(() => {
       swal({
         closeOnClickOutside: false,
         icon: "success",
         text: `得分：${allScope.value()}/60，${socopeAlert}`,
         buttons: "重新開始",
-        }).then(() => {
-          restart();
-          allScope.zeroing();
-          socopeBoard.innerHTML = `分數：${allScope.value()}`;
-        });
+      }).then(() => {
+        restart();
+        allScope.zeroing();
+        socopeBoard.innerHTML = `分數：${allScope.value()}`;
+      });
     }, 1000);
-    switch(allScope.value()) {
+    switch (allScope.value()) {
       case 0:
         socopeAlert = "可惜一題都沒答對，再接再厲！";
         break;
@@ -75,18 +75,18 @@ function restart() {
 function getScope(initScope) {
   var scope = initScope || 0;
   return {
-    gainPoint: function(point) {
+    gainPoint: function (point) {
       scope += point;
     },
-    deductPoint: function(point) {
+    deductPoint: function (point) {
       if (scope > 0) {
         scope -= point;
       }
     },
-    zeroing: function() {
+    zeroing: function () {
       scope = 0;
     },
-    value: function() {
+    value: function () {
       return scope;
     }
   }
@@ -171,18 +171,19 @@ function shuffleCards() {
             ．60分：全部都答對!太神啦！`,
     className: "swal-title,swal-overlay,swal-text,",
   })
-  .then(() => {
-    swal({
-      closeOnClickOutside: false,
-      icon: "info",
-      text: `挑戰準備開始！`,
-      buttons: false,
-      timer: 1500,
-    }),
-    shuffleCards(),
-    setTimeout(() => {
-      allflipCards();
-    }, 1500);})
+    .then(() => {
+      swal({
+        closeOnClickOutside: false,
+        icon: "info",
+        text: `挑戰準備開始！`,
+        buttons: false,
+        timer: 1500,
+      }),
+        shuffleCards(),
+        setTimeout(() => {
+          allflipCards();
+        }, 1500);
+    })
 })();
 
 /* 監聽每張卡片有沒有被點擊，有被點擊執行函式flipCard() */
