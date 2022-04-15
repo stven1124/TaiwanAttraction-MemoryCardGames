@@ -45,10 +45,6 @@ table {
 
 /* 整個版面 */
 body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   font-family: 微軟正黑體; 
   background-image: url('../images/background_img.jpg');
   background-repeat:no-repeat;
@@ -57,41 +53,32 @@ body {
   background-attachment:scroll;
 }
 
-/* 標題+卡片堆半透明區塊 */
-.memory_games_total {
+.wrap {
+  height: calc(100vh);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 750px;
+}
+
+/* 標題+卡片堆半透明區塊 */
+.memory_games_total {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   height: 850px;
-  margin-top: 20px;
   background-color: rgba(255,255,255,0.7);
   border-radius: 5%;
   box-shadow:0px 0px 10px rgba(10,10,0.8);
 }
 
-@media screen and (max-width: 1366px){
-  .memory_games_total {
-    width: 630px;
-    height: 730px;
-    margin-top: 20px;
-  }
-}
-
 /* 標題 */
 .title {
   font-size: 50px;
+  font-weight: bold;
   padding: 20px 0px;
   margin-top:30px;
   text-align: center;
-}
-
-@media screen and (max-width: 1366px){
-  .title {
-    margin-top:10px;
-    padding: 5px 0px;
-  }
 }
 
 /* 記分板 */
@@ -104,16 +91,9 @@ body {
 .memory_games{
   width: 680px;
   height: 680px;
-  margin: auto;
+  padding: 2%;
   display: flex;
   flex-wrap: wrap;
-}
-
-@media screen and (max-width: 1366px){
-  .memory_games{
-    width: 620px;
-    height: 620px;
-  }
 }
 
 /* 卡片 */
@@ -177,6 +157,24 @@ body {
   transform:rotateY(180deg);
 }
 
+/* 音效圖示  */
+.scope_audio_group {
+  width: 100%;
+  position: relative;
+}
+
+.scope_audio_group h2 {
+  display: flex;
+  justify-content: center;
+}
+
+.scope_audio_group i {
+  position: absolute;
+  right: 20px;
+  top: 0px;
+  font-size: 24px;
+}
+
 /* 彈跳視窗  */
 
 .swal-title {
@@ -217,4 +215,53 @@ body {
   color:#5290F4;
   background-color: #ffffff;
   border: 2px solid #5290F4;
+}
+
+
+/* 手機尺寸  */
+
+@media screen and (max-width: 568px){
+  .title {
+    margin-top: 10px;
+    font-size: 30px;
+  }
+
+  #socopeBoard {
+    font-size: 20px;
+  }
+
+  .memory_games_total {
+    height: 480px;
+  }
+
+  .memory_games {
+    width: 355px;
+    height: 355px;
+  }
+
+  .card_front i {
+    font-size: 2.5em;
+    padding-top: 15px;
+  }
+
+  .card_front span {
+    font-size: 12px;
+  }
+
+  .card_back i {
+    font-size: 4.5em;
+  }
+
+  .scope_audio_group i {
+    font-size: 20px;
+  }
+
+  .swal-title, .swal-button {
+    font-size: 18px;
+  }
+
+  .swal-text {
+    font-size: 14px;
+    padding: unset;
+  }
 }
