@@ -1,17 +1,34 @@
 const cards = document.querySelectorAll('.memory_card');
 const socopeBoard = document.getElementById("socopeBoard");
+const audioIcon = document.querySelector(".audio_icon");
 let hasFlippedCard = false;
 let lockBoard = false;
 let firstCard, secondCard;
 let allScope = getScope(0);
+let disableFlipCard = true;
+let audioMute = false;
 
 /* 點擊翻牌 */
 function flipCard(e) {
-   // 沒配對成功的話，就把牌蓋起來
-   if (lockBoard) return;
-  
-   // 避免翻同一張牌當做第二張
-   if (this === firstCard) return;
+  // 防止移除彈窗直接翻牌
+  if (disableFlipCard) {
+    swal({
+      closeOnClickOutside: false,
+      icon: "error",
+      text: `請重新整理頁面後，點選"準備好了!"再開始遊戲！`,
+      buttons: false,
+      timer: 1500,
+    });
+    return;
+  };
+
+  // 沒配對成功的話，就把牌蓋起來
+  if (lockBoard) return;
+
+  // 避免翻同一張牌當做第二張
+  if (this === firstCard) return;
+
+  flipCardAudio();
 
   this.classList.add('flip');
 
@@ -21,26 +38,28 @@ function flipCard(e) {
     firstCard = this;
     return;
   }
-  console.log(e);
   secondCard = this;
 
   checkMatchCards();
-  
+
   // 遊戲結束
-  if(Array.from(cards).every((card) => card.className === "memory_card flip")){
+  if (Array.from(cards).every((card) => card.className === "memory_card flip")) {
+    const audio = new Audio("media/win.mp3");
+    audio.muted = audioMute;
+    audio.play();
     setTimeout(() => {
       swal({
         closeOnClickOutside: false,
         icon: "success",
         text: `得分：${allScope.value()}/60，${socopeAlert}`,
         buttons: "重新開始",
-        }).then(() => {
-          restart();
-          allScope.zeroing();
-          socopeBoard.innerHTML = `分數：${allScope.value()}`;
-        });
+      }).then(() => {
+        restart();
+        allScope.zeroing();
+        socopeBoard.innerHTML = `分數：${allScope.value()}`;
+      });
     }, 1000);
-    switch(allScope.value()) {
+    switch (allScope.value()) {
       case 0:
         socopeAlert = "可惜一題都沒答對，再接再厲！";
         break;
@@ -58,9 +77,23 @@ function flipCard(e) {
       case 60:
         socopeAlert = "全部都答對!太神啦！";
         break;
-    }
+    };
   };
 
+};
+
+/* 翻牌音效 */
+function flipCardAudio() {
+  const audio = new Audio("media/flipCard.mp3");
+  audio.muted = audioMute;
+  audio.play();
+};
+
+/* 音效圖示 */
+function audioMuteChange() {
+  audioMute = !audioMute;
+  audioIcon.classList.toggle('fa-volume-high');
+  audioIcon.classList.toggle('fa-volume-xmark');
 };
 
 /* 重新開始 */
@@ -75,18 +108,18 @@ function restart() {
 function getScope(initScope) {
   var scope = initScope || 0;
   return {
-    gainPoint: function(point) {
+    gainPoint: function (point) {
       scope += point;
     },
-    deductPoint: function(point) {
+    deductPoint: function (point) {
       if (scope > 0) {
         scope -= point;
       }
     },
-    zeroing: function() {
+    zeroing: function () {
       scope = 0;
     },
-    value: function() {
+    value: function () {
       return scope;
     }
   }
@@ -118,20 +151,23 @@ function coverCards() {
   lockBoard = true;
   // 移除flip，把牌蓋起來
   setTimeout(() => {
+    flipCardAudio();
     firstCard.classList.remove('flip');
     secondCard.classList.remove('flip');
     resetCards();
   }, 800);
-}
+};
 
 /* 還原牌的變數 */
 function resetCards() {
   [hasFlippedCard, lockBoard] = [false, false];
   [firstCard, secondCard] = [null, null];
-}
+};
 
 /* 遊戲開始，翻開所有牌3秒 */
 function allflipCards() {
+  flipCardAudio();
+  disableFlipCard = false;
   cards.forEach(card => {
     card.classList.add('flip');
     card.removeEventListener('click', flipCard);
@@ -141,6 +177,7 @@ function allflipCards() {
       card.classList.remove('flip');
       card.addEventListener('click', flipCard);
     });
+    flipCardAudio();
   }, 3000);
 };
 
@@ -171,18 +208,19 @@ function shuffleCards() {
             ．60分：全部都答對!太神啦！`,
     className: "swal-title,swal-overlay,swal-text,",
   })
-  .then(() => {
-    swal({
-      closeOnClickOutside: false,
-      icon: "info",
-      text: `挑戰準備開始！`,
-      buttons: false,
-      timer: 1500,
-    }),
-    shuffleCards(),
-    setTimeout(() => {
-      allflipCards();
-    }, 1500);})
+    .then(() => {
+      swal({
+        closeOnClickOutside: false,
+        icon: "info",
+        text: `挑戰準備開始！`,
+        buttons: false,
+        timer: 1500,
+      }),
+        shuffleCards(),
+        setTimeout(() => {
+          allflipCards();
+        }, 1500);
+    })
 })();
 
 /* 監聽每張卡片有沒有被點擊，有被點擊執行函式flipCard() */
@@ -191,3 +229,5 @@ cards.forEach(card => card.addEventListener('click', flipCard));
 /* 將計分板輸出到HTML上 */
 socopeBoard.innerHTML = `分數：${allScope.value()}`;
 
+/* 監聽音效圖示有無被點擊 */
+audioIcon.addEventListener('click', audioMuteChange);
