@@ -8,15 +8,19 @@ let allScope = getScope(0);
 let disableFlipCard = true;
 let audioMute = false;
 
+window.addEventListener("resize", () => {
+  startAlert();
+});
+
 /* 翻牌音效 */
 const flipCardAudio = new Howl({
   src: ['audio/flipCard.mp3']
-},);
+});
 
 /* 勝利音效 */
 const winAudio = new Howl({
   src: ['audio/win.mp3']
-},);
+});
 
 /* 點擊翻牌 */
 function flipCard(e) {
@@ -58,6 +62,7 @@ function flipCard(e) {
     setTimeout(() => {
       swal({
         closeOnClickOutside: false,
+        closeOnEsc: false,
         icon: "success",
         text: `得分：${allScope.value()}/60，${socopeAlert}`,
         buttons: "重新開始",
@@ -193,7 +198,17 @@ function shuffleCards() {
 };
 
 /* 遊戲開始時的彈跳視窗 */
-(function startAlert() {
+function startAlert() {
+  if (window.orientation === 90 || window.orientation === -90) {
+    swal({
+      closeOnClickOutside: false,
+      closeOnEsc: false,
+      icon: "warning",
+      text: `請將手機豎直，將獲得更好的遊戲體驗！`,
+      buttons: false,
+    });
+    return;
+  };
   swal({
     closeOnClickOutside: false,
     buttons: "準備好了!",
@@ -224,7 +239,8 @@ function shuffleCards() {
           allflipCards();
         }, 1500);
     })
-})();
+};
+startAlert();
 
 /* 監聽每張卡片有沒有被點擊，有被點擊執行函式flipCard() */
 cards.forEach(card => card.addEventListener('click', flipCard));
