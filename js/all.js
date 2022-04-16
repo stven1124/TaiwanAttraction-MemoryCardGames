@@ -8,6 +8,16 @@ let allScope = getScope(0);
 let disableFlipCard = true;
 let audioMute = false;
 
+/* 翻牌音效 */
+const flipCardAudio = new Howl({
+  src: ['audio/flipCard.mp3']
+},);
+
+/* 勝利音效 */
+const winAudio = new Howl({
+  src: ['audio/win.mp3']
+},);
+
 /* 點擊翻牌 */
 function flipCard(e) {
   // 防止移除彈窗直接翻牌
@@ -28,7 +38,7 @@ function flipCard(e) {
   // 避免翻同一張牌當做第二張
   if (this === firstCard) return;
 
-  flipCardAudio();
+  flipCardAudio.play();
 
   this.classList.add('flip');
 
@@ -44,9 +54,7 @@ function flipCard(e) {
 
   // 遊戲結束
   if (Array.from(cards).every((card) => card.className === "memory_card flip")) {
-    const audio = new Audio("media/win.mp3");
-    audio.muted = audioMute;
-    audio.play();
+    winAudio.play();
     setTimeout(() => {
       swal({
         closeOnClickOutside: false,
@@ -82,16 +90,11 @@ function flipCard(e) {
 
 };
 
-/* 翻牌音效 */
-function flipCardAudio() {
-  const audio = new Audio("media/flipCard.mp3");
-  audio.muted = audioMute;
-  audio.play();
-};
-
 /* 音效圖示 */
 function audioMuteChange() {
   audioMute = !audioMute;
+  flipCardAudio.mute(audioMute);
+  winAudio.mute(audioMute);
   audioIcon.classList.toggle('fa-volume-high');
   audioIcon.classList.toggle('fa-volume-xmark');
 };
@@ -151,7 +154,7 @@ function coverCards() {
   lockBoard = true;
   // 移除flip，把牌蓋起來
   setTimeout(() => {
-    flipCardAudio();
+    flipCardAudio.play();
     firstCard.classList.remove('flip');
     secondCard.classList.remove('flip');
     resetCards();
@@ -166,7 +169,7 @@ function resetCards() {
 
 /* 遊戲開始，翻開所有牌3秒 */
 function allflipCards() {
-  flipCardAudio();
+  flipCardAudio.play();
   disableFlipCard = false;
   cards.forEach(card => {
     card.classList.add('flip');
@@ -177,7 +180,7 @@ function allflipCards() {
       card.classList.remove('flip');
       card.addEventListener('click', flipCard);
     });
-    flipCardAudio();
+    flipCardAudio.play();
   }, 3000);
 };
 
