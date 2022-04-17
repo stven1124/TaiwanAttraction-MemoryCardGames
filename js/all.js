@@ -199,7 +199,7 @@ function shuffleCards() {
 
 /* 遊戲開始時的彈跳視窗 */
 function startAlert() {
-  if (window.orientation === 90 || window.orientation === -90 || window.matchMedia("(orientation: landscape)").matches) {
+  if (window.orientation === 90 || window.orientation === -90) {
     swal({
       closeOnClickOutside: false,
       closeOnEsc: false,
